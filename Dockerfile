@@ -2,14 +2,6 @@
 FROM python:3.8.8-slim-buster
 
 #Diretorio padrao lambda container
-ARG FUNCTION_DIR = "/function/"
-WORKDIR ${FUNCTION_DIR}
-
-# Treinamento do modelo
-#Imagem base
-FROM python:3.8.8-slim-buster
-
-#Criação do diretório padrão do lambda container
 ARG FUNCTION_DIR="/function/"
 WORKDIR ${FUNCTION_DIR}
 
