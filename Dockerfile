@@ -31,7 +31,7 @@ RUN pip3 install --target ${FUNCTION_DIR} awslambdaric
 
 # Obtenção do aws-lambda-rie
 RUN wget https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie -P /usr/local/bin
-RUN chmod +x /usr/local/bin/aws-lambdarie
+RUN chmod +x /usr/local/bin/aws-lambda-rie
 
 #Copia dos arquivos de execução
 COPY app.py app.py
