@@ -21,12 +21,12 @@ jobs:
       - name: Build e Push da imagem Docker
         run: |
           aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin ${{ secrets.ACCOUNT_ID }}.dkr.ecr.us-west-2.amazonaws.com
-          docker build -t mlops-lambda-pipeline .
+          docker build -t mlops-lambda-container .
           docker tag mlops-lambda-container:latest ${{ secrets.ACCOUNT_ID }}.dkr.ecr.us-west-2.amazonaws.com/mlops-lambda-container:latest
           docker push ${{ secrets.ACCOUNT_ID }}.dkr.ecr.us-west-2.amazonaws.com/mlops-lambda-container:latest
       - name: Cria ou Atualiza a Função Lambda
         run: | 
           aws cloudformation deploy \
-            --stack-name mlops-lambda-pipeline-stack \
+            --stack-name mlops-lambda-container-stack \
             --template-file lambda.yml \
             --capabilities CAPABILITY_NAMED_IAM
