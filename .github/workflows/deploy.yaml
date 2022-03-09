@@ -1,0 +1,35 @@
+name: Deploy Modelo Online Lambda Container
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+      - uses: actions/checkout@v2
+
+      - name: Configurando Credenciais AWS
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          aws-region: ${{secrets.AWS_REGION_ID}}
+
+      - name: Build e Push da imagem Docker
+        run: |
+          aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin ${{secrets.ACCOUNT_ID}}.dkr.ecr.us-west-2.amazonaws.com
+          docker build -t mlops-lambda-container .
+          docker tag mlops-lambda-container:latest ${{secrets.ACCOUNT_ID}}.dkr.ecr.us-west-2.amazonaws.com/mlops-lambda-container:latest
+          docker push ${{secrets.ACCOUNT_ID}}.dkr.ecr.us-west-2.amazonaws.com/mlops-lambda-container:latest
+
+      - name: Cria ou Atualiza Lambda Container
+        run: |
+          aws cloudformation deploy \
+            --stack-name lambda-container-674 \
+            --template-file lambda.yml \
+            --capabilities CAPABILITY_NAMED_IAM
+
+
