@@ -29,5 +29,5 @@ jobs:
         run: | 
           aws cloudformation deploy \
             --stack-name mlops-lambda-container-stack \
-            --template-file lambda.yml \
+            --template-file lambda.yaml \
             --capabilities CAPABILITY_NAMED_IAM
