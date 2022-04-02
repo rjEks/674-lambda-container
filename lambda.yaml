@@ -1,16 +1,16 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Mlops Lambda Container
+Description: Mlops780 Lambda Container
 Resources:
-  Function:
+  FunctionLambdaContainer: 
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: mlops-lambda-container-model
+      FunctionName: mlops780-lambda-container-model
       Role: !GetAtt Role.Arn
       PackageType: Image
       Code:
-        ImageUri: 133562267374.dkr.ecr.us-west-2.amazonaws.com/mlops-lambda-container:latest
+        ImageUri: 133562267374.dkr.ecr.us-west-2.amazonaws.com/mlops780-lambda-container:latest
       Timeout: 90
-  Role:
+  RoleLambdaContainer:
     Type: AWS::IAM::Role
     Properties:
       RoleName: mlops-lambda-role

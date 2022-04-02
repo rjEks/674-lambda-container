@@ -1,4 +1,4 @@
-name: MLOps Lambda Container Pipeline
+name: MLOps 780 Lambda Container Pipeline
 
 on:
   push:
@@ -7,27 +7,29 @@ on:
 jobs:
   build:
     runs-on: ubuntu-20.04
-    steps:      
+    steps:
       - name: Checkout
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-      - name: Configure AWS credentials from your account
+      - name: Configuracao Credenciais AWS
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+          aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
           aws-region: us-west-2
-
-      - name: Build e Push da imagem Docker
+      
+      - name: Build e Push da Imagem Docker
         run: |
-          aws ecr create-repository --repository-name mlops-lambda-container
-          aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin ${{ secrets.ACCOUNT_ID }}.dkr.ecr.us-west-2.amazonaws.com
-          docker build -t mlops-lambda-container .
-          docker tag mlops-lambda-container:latest ${{ secrets.ACCOUNT_ID }}.dkr.ecr.us-west-2.amazonaws.com/mlops-lambda-container:latest
-          docker push ${{ secrets.ACCOUNT_ID }}.dkr.ecr.us-west-2.amazonaws.com/mlops-lambda-container:latest
-      - name: Cria ou Atualiza a Função Lambda
-        run: | 
+          aws ecr create-repository --repository-name mlops-lambda-container780
+          aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin ${{secrets.ACCOUNT_ID}}.dkr.ecr.us-west-2.amazonaws.com
+          docker build -t mlops780-lambda-container .
+          docker tag mlops780-lambda-container:latest ${{secrets.ACCOUNT_ID}}.dkr.ecr.us-west-2.amazonaws.com/mlops780-lambda-container:latest
+          docker push ${{secrets.ACCOUNT_ID}}.dkr.ecr.us-west-2.amazonaws.com/mlops780-lambda-container:latest
+
+      - name: Cria ou Atualiza a função Lambda
+        run : |
           aws cloudformation deploy \
-            --stack-name mlops-lambda-container-stack \
+            --stack-name mlops780-lambda-container \
             --template-file lambda.yaml \
             --capabilities CAPABILITY_NAMED_IAM
+      

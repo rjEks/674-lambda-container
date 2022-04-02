@@ -1,11 +1,11 @@
-#Imagem Base
 FROM python:3.8.8-slim-buster
 
-#Diretorio padrao lambda container
-ARG FUNCTION_DIR="/function/"
+
+#Diretorio padrao Lambda Container
+ARG FUNCTION_DIR="/function"
 WORKDIR ${FUNCTION_DIR}
 
-#Treinamento do modelo
+#Copiando codigo e dependencias para o treinamento do nosso modelo
 COPY requirements.txt ${FUNCTION_DIR}/requirements.txt
 COPY train.py ${FUNCTION_DIR}/train.py
 
@@ -17,19 +17,19 @@ RUN pip3 install \
 #Treinando o modelo
 RUN python3 train.py
 
-#Instalação do awslambdaric
+#Instalando o Lambda RIC
 RUN apt-get update && \
-  apt-get install -y \
-  g++ \
-  make \
-  cmake \
-  unzip \
-  wget \
-  libcurl4-openssl-dev
+apt-get install -y \
+g++ \
+make \
+cmake \
+unzip \
+wget \
+libcurl4-openssl-dev
 
 RUN pip3 install --target ${FUNCTION_DIR} awslambdaric
 
-# Obtenção do aws-lambda-rie
+# Download Lambda RIE
 RUN wget https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie -P /usr/local/bin
 RUN chmod +x /usr/local/bin/aws-lambda-rie
 
@@ -38,9 +38,12 @@ COPY app.py app.py
 RUN chmod +x app.py
 
 COPY entry.sh entry.sh
-RUN chmod +x entry.sh 
+RUN chmod +x entry.sh
 
 ENTRYPOINT ["./entry.sh"]
 CMD ["app.handler"]
+
+
+
 
 
