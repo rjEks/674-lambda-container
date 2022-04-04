@@ -9,7 +9,6 @@ def handler(event, context):
     sepal_width = float(event.get('Iris')['sepal_width'])
     petal_length = float(event.get('Iris')['petal_length'])
     petal_width = float(event.get('Iris')['petal_width'])
-
     row_reshape = np.array([sepal_length,sepal_width,petal_length,petal_width]).reshape(1,4)
 
     modelo = joblib.load("modelo.joblib")
